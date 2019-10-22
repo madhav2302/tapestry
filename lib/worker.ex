@@ -22,13 +22,11 @@ defmodule ProjWorker do
     common_prefix_length = common_prefix_length(guid, search_guid, 0)
 
     if common_prefix_length != 40 do
-      next_guid =
+      {next_guid, _backpointer} =
         Map.get(
           Map.get(dht, common_prefix_length),
           String.slice(search_guid, 0..common_prefix_length)
         )
-
-      # IO.puts("Next guid is #{next_guid}")
 
       GenServer.cast(
         node_name(Map.get(guid_to_node_id, next_guid)),

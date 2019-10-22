@@ -1,15 +1,15 @@
 defmodule ProjApplication do
   use Application
 
-  @log_interval 5_000
+  @log_interval 1_000
   @sleep_time 10
   @number_of_levels 40
 
   def start(_type, _args) do
     [num_nodes, num_requests] = Enum.map(System.argv(), fn x -> String.to_integer(x) end)
 
-    if num_nodes == 0 do
-      IO.puts("Number of nodes should be greater than 0")
+    if num_nodes <= 1 do
+      IO.puts("Number of nodes should be greater than 1")
     else
       # Start Supervisor
       ProjSupervisor.start_link()
@@ -20,10 +20,8 @@ defmodule ProjApplication do
       node_id_to_guid = Enum.into(Enum.map(guid_to_node_id, fn {k, v} -> {v, k} end), %{})
 
       IO.puts("Initialize DHT")
-      ## Initialize DHT
 
-      ### Structure of dht_per_node : guid -> levels -> level_value_for_each_hex_value
-
+      ### Structure of dht_per_node : guid -> levels -> {level_value_for_each_hex_value, backpointer}
       {dht_per_node, _filtered_guids_cache} =
         iterate_over_guids(Map.values(node_id_to_guid), 0, %{}, %{})
 
@@ -31,7 +29,6 @@ defmodule ProjApplication do
       ProjSupervisor.start_state(num_nodes, num_requests)
 
       ## Initialize workers
-
       Enum.each(1..num_nodes, fn node_id ->
         guid = Map.get(node_id_to_guid, node_id)
 
@@ -47,7 +44,6 @@ defmodule ProjApplication do
       IO.puts("Started Searching")
 
       ## Initialize searching
-
       Enum.each(1..num_nodes, fn node_id ->
         GenServer.cast(ProjWorker.node_name(node_id), {:start_work})
       end)
@@ -67,7 +63,7 @@ defmodule ProjApplication do
       nil
     else
       :timer.sleep(@sleep_time)
-      current_time = System.system_time(:second)
+      current_time = System.system_time(:millisecond)
 
       last_checked =
         if current_time - last_checked > @log_interval do
@@ -96,29 +92,51 @@ defmodule ProjApplication do
     end
   end
 
-  defp iterate_over_levels(guids, index, guid, result, filtered_guids_cache) do
+  defp iterate_over_levels(guids, index, current_guid, result, filtered_guids_cache) do
     if index == @number_of_levels do
       {result, filtered_guids_cache}
     else
-      current = String.slice(guid, 0..index)
+      current = String.slice(current_guid, 0..index)
 
       prefix =
         if index == 0 do
           ""
         else
-          String.slice(guid, 0..(index - 1))
+          String.slice(current_guid, 0..(index - 1))
         end
 
       {current_result, filtered_guids_cache} =
-        iterate_over_hex(guids, 0, current, prefix, %{}, filtered_guids_cache)
+        iterate_over_hex(
+          guids,
+          current_guid,
+          0,
+          current,
+          prefix,
+          %{},
+          filtered_guids_cache
+        )
 
       result = Map.put(result, index, current_result)
 
-      iterate_over_levels(guids, index + 1, guid, result, filtered_guids_cache)
+      iterate_over_levels(
+        guids,
+        index + 1,
+        current_guid,
+        result,
+        filtered_guids_cache
+      )
     end
   end
 
-  defp iterate_over_hex(guids, index, current, prefix, result, filtered_guids_cache) do
+  defp iterate_over_hex(
+         guids,
+         current_guid,
+         index,
+         current,
+         prefix,
+         result,
+         filtered_guids_cache
+       ) do
     if index == 16 do
       {result, filtered_guids_cache}
     else
@@ -135,12 +153,20 @@ defmodule ProjApplication do
       result =
         if filteredGuids |> length() != 0 && "#{current}" != "#{newPrefix}" do
           ## TODO  : Choose nearest neighbour
-          Map.put(result, newPrefix, Enum.random(filteredGuids))
+          Map.put(result, newPrefix, {Enum.random(filteredGuids), current_guid})
         else
           result
         end
 
-      iterate_over_hex(guids, index + 1, current, prefix, result, filtered_guids_cache)
+      iterate_over_hex(
+        guids,
+        current_guid,
+        index + 1,
+        current,
+        prefix,
+        result,
+        filtered_guids_cache
+      )
     end
   end
 
