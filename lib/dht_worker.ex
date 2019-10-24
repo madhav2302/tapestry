@@ -28,15 +28,10 @@ defmodule DhtWorker do
     last_checked = 0
     index = 0
 
-    {dht_per_node, _filtered_guids_cache} =
-      iterate_over_guids(all_guids, guids_to_process, index, %{}, %{}, last_checked)
+    dht_per_node = iterate_over_guids(all_guids, guids_to_process, index, %{}, last_checked)
 
     processed = true
     {:noreply, {all_guids, guids_to_process, dht_per_node, processed}}
-  end
-
-  def guids(num) do
-    Enum.map(1..num, &Utils.hash/1)
   end
 
   def iterate_over_guids(
@@ -44,17 +39,15 @@ defmodule DhtWorker do
         guids_to_process,
         index,
         result,
-        filtered_guids_cache,
         last_checked
       ) do
     if index == guids_to_process |> length() do
-      {result, filtered_guids_cache}
+      result
     else
       # Change this
       current_guid = Enum.at(guids_to_process, index)
 
-      {current_result, filtered_guids_cache} =
-        iterate_over_levels(all_guids, 0, current_guid, %{}, filtered_guids_cache)
+      current_result = iterate_over_levels(all_guids, 0, current_guid, %{})
 
       result = Map.put(result, current_guid, current_result)
 
@@ -69,13 +62,13 @@ defmodule DhtWorker do
           last_checked
         end
 
-      iterate_over_guids(all_guids, guids_to_process, index + 1, result, filtered_guids_cache, last_checked)
+      iterate_over_guids(all_guids, guids_to_process, index + 1, result, last_checked)
     end
   end
 
-  defp iterate_over_levels(guids, index, current_guid, result, filtered_guids_cache) do
+  defp iterate_over_levels(guids, index, current_guid, result) do
     if index == Utils.number_of_levels() do
-      {result, filtered_guids_cache}
+      result
     else
       current = String.slice(current_guid, 0..index)
 
@@ -86,15 +79,14 @@ defmodule DhtWorker do
           String.slice(current_guid, 0..(index - 1))
         end
 
-      {current_result, filtered_guids_cache} =
+      current_result =
         iterate_over_hex(
           guids,
           current_guid,
           0,
           current,
           prefix,
-          %{},
-          filtered_guids_cache
+          %{}
         )
 
       result = Map.put(result, index, current_result)
@@ -103,8 +95,7 @@ defmodule DhtWorker do
         guids,
         index + 1,
         current_guid,
-        result,
-        filtered_guids_cache
+        result
       )
     end
   end
@@ -115,21 +106,14 @@ defmodule DhtWorker do
          index,
          current,
          prefix,
-         result,
-         filtered_guids_cache
+         result
        ) do
     if index == 16 do
-      {result, filtered_guids_cache}
+      result
     else
       newPrefix = "#{prefix}#{Integer.to_string(index, 16)}"
 
-      {filteredGuids, filtered_guids_cache} =
-        if Map.has_key?(filtered_guids_cache, newPrefix) do
-          {Map.get(filtered_guids_cache, newPrefix), filtered_guids_cache}
-        else
-          iFilteredGuids = Enum.filter(guids, fn guid -> String.starts_with?(guid, newPrefix) end)
-          {iFilteredGuids, Map.put(filtered_guids_cache, newPrefix, iFilteredGuids)}
-        end
+      filteredGuids = Enum.filter(guids, fn guid -> String.starts_with?(guid, newPrefix) end)
 
       result =
         if filteredGuids |> length() != 0 && "#{current}" != "#{newPrefix}" do
@@ -148,8 +132,7 @@ defmodule DhtWorker do
         index + 1,
         current,
         prefix,
-        result,
-        filtered_guids_cache
+        result
       )
     end
   end
