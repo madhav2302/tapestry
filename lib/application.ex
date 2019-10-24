@@ -13,11 +13,8 @@ defmodule ProjApplication do
       guid_to_node_id =
         Enum.into(Enum.map(1..num_nodes, fn node_id -> {Utils.hash(node_id), node_id} end), %{})
 
-      node_id_to_guid = Enum.into(Enum.map(guid_to_node_id, fn {k, v} -> {v, k} end), %{})
-
       IO.puts("Initialize DHT")
-      dht_per_node = DhtSupervisor.init_dht(Map.values(node_id_to_guid))
-      # IO.puts "Map size #{map_size(dht_per_node)}"
+      dht_per_node = DhtSupervisor.init_dht(Map.keys(guid_to_node_id))
 
       # Start Supervisor
       ProjSupervisor.start_link()
@@ -26,17 +23,7 @@ defmodule ProjApplication do
       ProjSupervisor.start_state(num_nodes, num_requests)
 
       ## Initialize workers
-      Enum.each(1..num_nodes, fn node_id ->
-        guid = Map.get(node_id_to_guid, node_id)
-
-        ProjSupervisor.start_worker(
-          node_id,
-          guid,
-          Map.get(dht_per_node, guid),
-          num_requests,
-          guid_to_node_id
-        )
-      end)
+      initialize_workers(num_nodes, num_requests, guid_to_node_id, dht_per_node)
 
       IO.puts("Started Searching")
 
@@ -53,6 +40,22 @@ defmodule ProjApplication do
     end
 
     {:ok, self()}
+  end
+
+  defp initialize_workers(num_nodes, num_requests, guid_to_node_id, dht_per_node) do
+    node_id_to_guid = Enum.into(Enum.map(guid_to_node_id, fn {k, v} -> {v, k} end), %{})
+
+    Enum.each(1..num_nodes, fn node_id ->
+      guid = Map.get(node_id_to_guid, node_id)
+
+      ProjSupervisor.start_worker(
+        node_id,
+        guid,
+        Map.get(dht_per_node, guid),
+        num_requests,
+        guid_to_node_id
+      )
+    end)
   end
 
   defp lets_wait(last_checked) do
