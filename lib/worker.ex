@@ -6,7 +6,7 @@ defmodule ProjWorker do
 
   def start_link(node_id, guid, dht, num_requests, guid_to_node_id) do
     GenServer.start_link(__MODULE__, [node_id, guid, dht, num_requests, guid_to_node_id],
-      name: node_name(node_id)
+      name: Utils.node_name(node_id)
     )
   end
 
@@ -19,7 +19,7 @@ defmodule ProjWorker do
         {:search_node, search_by, search_guid, hop},
         {node_id, guid, dht, num_requests, guid_to_node_id, request_count}
       ) do
-    common_prefix_length = common_prefix_length(guid, search_guid, 0)
+    common_prefix_length = Utils.common_prefix_length(guid, search_guid)
 
     if common_prefix_length != 40 do
       {next_guid, _backpointer} =
@@ -29,7 +29,7 @@ defmodule ProjWorker do
         )
 
       GenServer.cast(
-        node_name(Map.get(guid_to_node_id, next_guid)),
+        Utils.node_name(Map.get(guid_to_node_id, next_guid)),
         {:search_node, search_by, search_guid, hop + 1}
       )
     else
@@ -57,23 +57,11 @@ defmodule ProjWorker do
         request_count
       else
         search_guid = Enum.random(Map.keys(guid_to_node_id) -- [guid])
-        GenServer.cast(node_name(node_id), {:search_node, guid, search_guid, 0})
+        GenServer.cast(Utils.node_name(node_id), {:search_node, guid, search_guid, 0})
         Process.send_after(self(), {:start_search}, @interval)
         request_count + 1
       end
 
     {:noreply, {node_id, guid, dht, num_requests, guid_to_node_id, request_count}}
-  end
-
-  def node_name(node_id) do
-    :"#{node_id}"
-  end
-
-  defp common_prefix_length(self_guid, search_guid, index) do
-    if index == 40 || String.at(self_guid, index) != String.at(search_guid, index) do
-      index
-    else
-      common_prefix_length(self_guid, search_guid, index + 1)
-    end
   end
 end

@@ -1,7 +1,9 @@
 {application,tapestry,
              [{applications,[kernel,stdlib,elixir,logger]},
               {description,"tapestry"},
-              {modules,['Elixir.ProjApplication','Elixir.ProjState',
-                        'Elixir.ProjSupervisor','Elixir.ProjWorker']},
+              {modules,['Elixir.DhtSupervisor','Elixir.DhtWorker',
+                        'Elixir.ProjApplication','Elixir.ProjState',
+                        'Elixir.ProjSupervisor','Elixir.ProjWorker',
+                        'Elixir.Utils']},
               {registered,[]},
               {vsn,"0.1.0"}]}.
