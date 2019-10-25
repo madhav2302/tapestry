@@ -1,0 +1,130 @@
+## Number of nodes 100
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 3
+
+real    0m9.851s
+user    0m1.894s
+sys     0m0.214s
+
+
+##  Number of nodes 200
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m10.351s
+user    0m3.886s
+sys     0m0.251s
+
+
+## Number of nodes 300
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m10.938s
+user    0m7.201s
+sys     0m0.305s
+
+
+## Number of nodes 400
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m11.558s
+user    0m11.906s
+sys     0m0.359s
+
+
+## Number of nodes 500
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m12.477s
+user    0m18.999s
+sys     0m0.555s
+
+
+## Number of nodes 600
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m13.216s
+user    0m25.940s
+sys     0m0.553s
+
+
+## Number of nodes 700
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m14.864s
+user    0m40.074s
+sys     0m0.894s
+
+
+## Number of nodes 800
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m16.172s
+user    0m56.696s
+sys     0m0.928s
+
+
+## Number of nodes 900
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m18.480s
+user    1m21.449s
+sys     0m1.376s
+
+
+## Number of nodes 1000
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 4
+
+real    0m21.429s
+user    1m54.230s
+sys     0m2.030s
+
+
+## Number of nodes 1500
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 5
+
+real    0m37.353s
+user    4m37.371s
+sys     0m5.223s
+
+
+## Number of nodes 2000
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 5
+
+real    1m2.227s
+user    9m16.619s
+sys     0m11.525s

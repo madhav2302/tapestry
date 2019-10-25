@@ -22,15 +22,15 @@ echo "Number of nodes 1500"
 time mix run project3.exs 1500 10
 echo "Number of nodes 2000"
 time mix run project3.exs 2000 10
-echo "Number of nodes 2500"
-time mix run project3.exs 2500 10
-echo "Number of nodes 3000"
-time mix run project3.exs 3000 10
-echo "Number of nodes 3500"
-time mix run project3.exs 3500 10
-echo "Number of nodes 4000"
-time mix run project3.exs 4000 10
-echo "Number of nodes 4500"
-time mix run project3.exs 4500 10
-echo "Number of nodes 5000"
-time mix run project3.exs 5000 10
+# echo "Number of nodes 2500"
+# time mix run project3.exs 2500 10
+# echo "Number of nodes 3000"
+# time mix run project3.exs 3000 10
+# echo "Number of nodes 3500"
+# time mix run project3.exs 3500 10
+# echo "Number of nodes 4000"
+# time mix run project3.exs 4000 10
+# echo "Number of nodes 4500"
+# time mix run project3.exs 4500 10
+# echo "Number of nodes 5000"
+# time mix run project3.exs 5000 10
