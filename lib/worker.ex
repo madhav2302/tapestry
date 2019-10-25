@@ -43,16 +43,20 @@ defmodule ProjWorker do
     common_prefix_length = Utils.common_prefix_length(guid, search_guid)
 
     if common_prefix_length != 40 do
-      next_guid =
-        Map.get(
+      {next_guid, increase_count} =
+        nearest_neighbour(
           Map.get(dht, common_prefix_length),
           String.at(search_guid, common_prefix_length)
         )
 
-      GenServer.cast(
-        Utils.node_name(Map.get(guid_to_node_id, next_guid)),
-        {:search_node, search_by, search_guid, hop + 1}
-      )
+      if increase_count do
+        ProjState.increase_count(search_by, hop)
+      else
+        GenServer.cast(
+          Utils.node_name(Map.get(guid_to_node_id, next_guid)),
+          {:search_node, search_by, search_guid, hop + 1}
+        )
+      end
     else
       ProjState.increase_count(search_by, hop)
     end
@@ -83,5 +87,24 @@ defmodule ProjWorker do
       end
 
     {:noreply, {node_id, guid, dht, num_requests, guid_to_node_id, request_count}}
+  end
+
+  defp nearest_neighbour(level_map, hex) do
+    if map_size(level_map) == 0 do
+      {nil, true}
+    else
+      next_guid = Map.get(level_map, hex)
+
+      if is_nil(next_guid) do
+        {next_guid, __} =
+          nearest_neighbour(
+            level_map,
+            Integer.to_string(rem(String.to_integer(hex, 16) + 1, 16), 16)
+          )
+        {next_guid, false}
+      else
+        {next_guid, false}
+      end
+    end
   end
 end

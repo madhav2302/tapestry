@@ -33,9 +33,9 @@ defmodule ProjState do
   end
 
   ### Callbacks ###
-
+  # When all request completes, we exit from application
   def handle_call({:is_completed}, _from, {num_nodes, num_requests, count, max, request_per_node}) do
-    is_completed = count > (num_requests * num_nodes * 95 / 100)
+    is_completed = count == num_requests * num_nodes
     {:reply, is_completed, {num_nodes, num_requests, count, max, request_per_node}}
   end
 

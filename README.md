@@ -9,7 +9,7 @@
 ### Steps to run the Project:
 
 1. Unzip the file Project3.tgz.  
-   `unzip Project3.tgz`  
+   `tar -xvzf Project3.tgz`  
 2. Change the directory to tapestry.  
    `cd tapestry` 
 3. Run the project using:  
@@ -242,9 +242,9 @@ The corresponding value to the GUID will be the neighbouring nodes to which the 
 The routing table will have 40 levels because of the 40 character GUID.
 
 Routing - Routing is carried out using the routing table and the message is transmitted to the neighbours by  
-doing a lookup to the routing table. The API RouteToNode is implemented.
+doing a lookup to the routing table with prefix matching. The API RouteToNode is implemented.
 
-Dynamic node inserting - 1% of the nodes are being instrted dynamically.
+Dynamic node inserting - 1% of the nodes are being inserted dynamically.
 ```
 
 --- 

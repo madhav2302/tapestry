@@ -36,7 +36,7 @@ defmodule ProjApplication do
       ## Initialize workers
       initialize_workers(init_num_nodes, num_requests, guid_to_node_id, dht_per_node)
 
-      IO.puts "Insert nodes dynamically"
+      IO.puts("Insert nodes dynamically")
       # Insert node dynamically
       _guid_to_node_id =
         if init_num_nodes != num_nodes do
@@ -116,7 +116,7 @@ defmodule ProjApplication do
 
       last_checked =
         if current_time - last_checked > @log_interval do
-          # IO.puts("Completed request count #{ProjState.completed_requests()}")
+          IO.puts("Completed request count #{ProjState.completed_requests()}")
           current_time
         else
           last_checked
