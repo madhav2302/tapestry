@@ -1,21 +1,41 @@
-# Tapestry
+# TAPESTRY
 
-**TODO: Add description**
+### Group Members
+1.   Madhav Sodhani       :     1988-9109 
+1.   Vaibhav Mohan Sahay  :     5454-1830
 
-## Installation
+--- 
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `tapestry` to your list of dependencies in `mix.exs`:
+### Steps to run the Project:
 
-```elixir
-def deps do
-  [
-    {:tapestry, "~> 0.1.0"}
-  ]
-end
+1. Unzip the file Project3.tgz.  
+   `unzip Project3.tgz`  
+2. Change the directory to tapestry.  
+   `cd tapestry` 
+3. Run the project using:  
+   `mix run project3.exs numNodes numRequests`
+   
+
+### Sample Output
+
+Run-1
+
+```text
+
+```
+---
+### What is Working
+```text
+Distributed Hashtable   
+Routing 
+Dynamic node inserting
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/tapestry](https://hexdocs.pm/tapestry).
+--- 
+### Largest Network
+
+
+```text
+5000 nodes with 5 hops
+```
 
