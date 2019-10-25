@@ -28,6 +28,6 @@ Run-1
 
 
 ```text
-
+5000 nodes with 5 hops
 ```
 
