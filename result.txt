@@ -128,3 +128,75 @@ Max number of hops taken are 5
 real    1m2.227s
 user    9m16.619s
 sys     0m11.525s
+
+
+##Number of nodes 2500
+
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 5
+
+real    1m29.764s
+user    14m19.273s
+sys     0m13.116s
+
+
+## Number of nodes 3000
+
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 5
+
+real    2m8.828s
+user    21m29.200s
+sys     0m22.096s
+
+
+## Number of nodes 3500
+
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 5
+
+real    2m56.866s
+user    29m56.370s
+sys     0m20.594s
+
+
+## Number of nodes 4000
+
+Initialize DHT
+Insert nodes dynamically
+^[[CStart Requests
+Max number of hops taken are 5
+
+real    4m12.687s
+user    41m2.768s
+sys     1m45.523s
+
+
+## Number of nodes 4500
+
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 5
+
+real    5m41.383s
+user    52m50.809s
+sys     2m9.054s
+
+
+## Number of nodes 5000
+
+Initialize DHT
+Insert nodes dynamically
+Start Requests
+Max number of hops taken are 5
+
+real    7m26.876s
+user    69m50.378s
+sys     2m40.807s
