@@ -26,7 +26,9 @@ Run-1
 ---
 ### What is Working
 ```text
-Distributed Hashtable, routing and dynamic node inserting.
+Distributed Hashtable   
+Routing 
+Dynamic node inserting
 ```
 
 --- 
