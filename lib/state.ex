@@ -35,7 +35,7 @@ defmodule ProjState do
   ### Callbacks ###
 
   def handle_call({:is_completed}, _from, {num_nodes, num_requests, count, max, request_per_node}) do
-    is_completed = count > (num_requests * num_nodes * 90 / 100)
+    is_completed = count > (num_requests * num_nodes * 95 / 100)
     {:reply, is_completed, {num_nodes, num_requests, count, max, request_per_node}}
   end
 

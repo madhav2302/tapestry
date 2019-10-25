@@ -1,8 +1,8 @@
 defmodule ProjApplication do
   use Application
 
-  ### We will insert 10 % nodes dynamically
-  @dynamic_insertion_percentage 10
+  ### We will insert 1 % nodes dynamically
+  @dynamic_insertion_percentage 1
 
   ### Every @log_interval milliseconds we check how many requests have been initialized
   @log_interval 5_000
