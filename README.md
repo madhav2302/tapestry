@@ -237,9 +237,14 @@ sys     2m40.807s
 ---
 ### What is Working
 ```text
-Distributed Hashtable   
-Routing 
-Dynamic node inserting
+Distributed Hashtable - All the nodes in the network are assigned a GUID based on base 16 SHA algorithm.  
+The corresponding value to the GUID will be the neighbouring nodes to which the message has to be passed.  
+The routing table will have 40 levels because of the 40 character GUID.
+
+Routing - Routing is carried out using the routing table and the message is transmitted to the neighbours by  
+doing a lookup to the routing table. The API RouteToNode is implemented.
+
+Dynamic node inserting - 1% of the nodes are being instrted dynamically.
 ```
 
 --- 
