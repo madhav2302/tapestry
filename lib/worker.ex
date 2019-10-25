@@ -16,16 +16,37 @@ defmodule ProjWorker do
   end
 
   def handle_cast(
+        {:update_dht_for_new_node, new_node_id, new_node_guid, level},
+        {node_id, guid, dht, num_requests, guid_to_node_id, request_count}
+      ) do
+    guid_to_node_id = Map.put(guid_to_node_id, new_node_guid, new_node_id)
+
+    levelMap = Map.get(dht, level)
+    hex = String.at(new_node_guid, level)
+
+    levelMap =
+      if Map.has_key?(levelMap, hex) do
+        node_at_hex = Map.get(levelMap, hex)
+        Map.put(levelMap, hex, Utils.nearest_neighbour(guid, [node_at_hex, new_node_guid]))
+      else
+        Map.put(levelMap, hex, new_node_guid)
+      end
+
+    dht = Map.put(dht, level, levelMap)
+    {:noreply, {node_id, guid, dht, num_requests, guid_to_node_id, request_count}}
+  end
+
+  def handle_cast(
         {:search_node, search_by, search_guid, hop},
         {node_id, guid, dht, num_requests, guid_to_node_id, request_count}
       ) do
     common_prefix_length = Utils.common_prefix_length(guid, search_guid)
 
     if common_prefix_length != 40 do
-      {next_guid, _backpointer} =
+      next_guid =
         Map.get(
           Map.get(dht, common_prefix_length),
-          String.slice(search_guid, 0..common_prefix_length)
+          String.at(search_guid, common_prefix_length)
         )
 
       GenServer.cast(
@@ -33,8 +54,7 @@ defmodule ProjWorker do
         {:search_node, search_by, search_guid, hop + 1}
       )
     else
-      ProjState.increase_count(hop)
-      # IO.puts("Found #{search_guid} on #{hop} which is searched by #{search_by}")
+      ProjState.increase_count(search_by, hop)
     end
 
     {:noreply, {node_id, guid, dht, num_requests, guid_to_node_id, request_count}}

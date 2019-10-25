@@ -19,7 +19,7 @@ defmodule DhtSupervisor do
     DynamicSupervisor.start_child(@me, spec)
   end
 
-  ### Structure of dht_per_node : guid -> levels -> {level_value_for_each_hex_value, backpointer}
+  ### Structure of dht_per_node : guid -> {levels -> {hex -> route}}
   def init_dht(guids) do
     DhtSupervisor.start_link()
     chunk_size = 100

@@ -34,13 +34,13 @@ defmodule DhtWorker do
     {:noreply, {all_guids, guids_to_process, dht_per_node, processed}}
   end
 
-  def iterate_over_guids(
-        all_guids,
-        guids_to_process,
-        index,
-        result,
-        last_checked
-      ) do
+  defp iterate_over_guids(
+         all_guids,
+         guids_to_process,
+         index,
+         result,
+         last_checked
+       ) do
     if index == guids_to_process |> length() do
       result
     else
@@ -64,6 +64,10 @@ defmodule DhtWorker do
 
       iterate_over_guids(all_guids, guids_to_process, index + 1, result, last_checked)
     end
+  end
+
+  def dht_for_guid(all_guids, guid) do
+    iterate_over_levels(all_guids, 0, guid, %{})
   end
 
   defp iterate_over_levels(guids, index, current_guid, result) do
@@ -119,8 +123,8 @@ defmodule DhtWorker do
         if filteredGuids |> length() != 0 && "#{current}" != "#{newPrefix}" do
           Map.put(
             result,
-            newPrefix,
-            {Utils.nearest_neighbour(current_guid, filteredGuids), current_guid}
+            Integer.to_string(index, 16),
+            Utils.nearest_neighbour(current_guid, filteredGuids)
           )
         else
           result
