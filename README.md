@@ -7,6 +7,12 @@
 --- 
 
 ### Steps to run the Project:
+
+1. Unzip the file Project3.tgz.  
+   `unzip Project3.tgz`  
+2. Change the directory to tapestry.  
+   `cd tapestry` 
+3. Run the project using:  
    `mix run project3.exs numNodes numRequests`
    
 
